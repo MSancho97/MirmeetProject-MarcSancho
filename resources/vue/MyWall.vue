@@ -6,11 +6,11 @@
             <div class="info bg-cyan w-full mx-5 p-3 rounded-lg flex flex-row gap-y-3">
                 <div
                     class="flex flex-col rounded-full w-20 h-20 bg-gray-300 justify-center items-center mr-4 overflow-hidden">
-                    <img v-bind:src="post.photo" alt="" class="w-full h-full object-cover">
+                    <img v-bind:src="post.profile" alt="" class="w-full h-full object-cover hover:cursor-pointer" @click="goToProfile(post.user)">
                 </div>
                 <div class="other-content w-full flex justify-between">
                     <div class="user-info flex flex-col h-full justify-around ml-4 gap-y-1">
-                        <span class="username text-sm font-comfortaa font-semibold">@{{ post.user }}</span>
+                        <span class="username text-sm font-comfortaa font-semibold hover:cursor-pointer" @click="goToProfile(post.user)">@{{ post.user }}</span>
                         <button class="btn-follow bg-purple rounded-xl py-0.5 px-4 text-white">Seguir</button>
                     </div>
 
@@ -79,6 +79,11 @@ export default {
                 console.log(data)
                 this.posts_data = data
             })
+        },
+        goToProfile(user) {
+            const baseURL = window.location.origin;
+            const profileURL = `${baseURL}/perfil/${user}`;
+            window.location.href = profileURL; 
         },
         copyURL(post) {
             const baseURL = window.location.origin;
