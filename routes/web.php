@@ -213,6 +213,10 @@ Route::get('/home', function() {
     return view('walls.home_wall');
 })->middleware(['auth', 'verified']);
 
+Route::get('/post-view/{id}', [PublicationController::class, 'showViewPost'])->middleware(['auth', 'verified']);
+Route::get('/show-post/{id}', [PublicationController::class,  'viewPost'])->middleware(['auth', 'verified']);
+  
+
 // Route::get('/publications/{follower_id}',  [PublicationController::class, 'GetPosts']);
 // Route::get('/publications',  [PublicationController::class, 'GetAllPosts2']);
 // Route::get('/publications2', [PublicationController::class, 'GetPosts3'])->name('discover-prova');

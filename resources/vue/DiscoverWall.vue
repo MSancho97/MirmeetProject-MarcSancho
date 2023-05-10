@@ -6,7 +6,7 @@
             <div class="info bg-cyan w-full mx-5 p-3 rounded-lg flex flex-row gap-y-3">
                 <div
                     class="flex flex-col rounded-full w-20 h-20 bg-gray-300 justify-center items-center mr-4 overflow-hidden">
-                    <img v-bind:src="post.photo" alt="" class="w-full h-full object-cover">
+                    <img v-bind:src="post.profile" alt="" class="w-full h-full object-cover">
                 </div>
                 <div class="other-content w-full flex justify-between">
                     <div class="user-info flex flex-col h-full justify-around ml-4 gap-y-1">
@@ -22,9 +22,9 @@
             </div>
 
             <div class="images w-full mx-5 mt-1">
-                <div class="image w-full">
+                <a :href="'/post-view/' + post.post">
                     <img :src="post.image" alt="image" class="rounded-md">
-                </div>
+                </a>
             </div>
 
 
@@ -41,12 +41,12 @@
 
                 </div>
             </div>
-
+            <div id="message" class="hidden">La URL se ha copiado al portapapeles</div>
             <div class="options bg-purple w-full flex justify-around mx-5 p-1 rounded-lg text-white text-xl">
                 <like-BTN v-bind:id_user="post.id_user" v-bind:id_post="post.post" />
                 <button><i class="fa fa-retweet"></i></button>
                 <button><i class="fa-regular fa-comment"></i></button>
-                <button><i class="fa fa-share"></i></button>
+                <button @click="copyURL(post)"><i class="fa fa-share"></i></button>
             </div>
         </div>
     </div>
@@ -56,10 +56,12 @@
 import axios from 'axios';
 import likeBTN from './LikeBTN.vue'
 import LikeBTN from './LikeBTN.vue';
+import Swal from 'sweetalert2';
 import { resultPosts } from './mostrar-posts';
 
 export default {
     components: { LikeBTN },
+
     data() {
         return {
             posts_data: [],
@@ -69,14 +71,30 @@ export default {
     mounted() {
         this.getposts()
     },
+
     methods: {
         getposts() {
             resultPosts('/posts-discover').then(data => {
                 this.posts_data = data
             })
         },
-    }
 
+        copyURL(post) {
+            const baseURL = window.location.origin;
+            const shareURL = `${baseURL}/post-view/${post.post}`;
+            navigator.clipboard.writeText(shareURL)
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Se ha copiado la URL de la imagen en su portapapeles. ',
+                        confirmButtonText: 'Volver'
+                    })
+                })
+                .catch((error) => {
+                    console.error("Hubo un error al copiar la URL al portapapeles: ", error);
+                });
+        }
+    }
 }
 
 </script>
